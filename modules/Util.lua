@@ -1,0 +1,27 @@
+-- [K, V] @ (Table[K, V]) => Array[V]
+function Kaydee.tableValues(t)
+  local out = {}
+  for k, v in pairs(t) do
+    table.insert(out, v)
+  end
+  return out
+end
+
+-- [Key, Value] @ (Table[Key, Array[Value]], Key, Value) => Unit
+function Kaydee.addToOverlord(overlord, key, value)
+  if overlord[key] ~= nil then
+    table.insert(overlord[key], value)
+  else
+    overlord[key] = { value }
+  end
+end
+
+-- (String) => String
+function Kaydee.trim(str)
+  return str:gsub("^%s*(.-)%s*$", "%1")
+end
+
+-- (String, String) => Boolean
+function Kaydee.endsWith(str, suffix)
+   return suffix == "" or str:sub(-#suffix) == suffix
+end

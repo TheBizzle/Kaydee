@@ -1,0 +1,21 @@
+## Interface: 11302
+## Title: Kaydee
+## Author: TheBizzle
+## Version: 0.0.1
+## Dependencies: LibDBIcon-1.0, LibDeflate
+## SavedVariables: KaydeeDB
+## X-Donate: www.github.com/TheBizzle
+## X-License: BSD-3
+## X-Website: www.github.com/TheBizzle/Kaydee
+
+locales/enUS.lua
+locales/esMX.lua
+locales/deDE.lua
+
+modules/Init.lua
+modules/Util.lua
+modules/Kaydee.lua
+modules/CombatLogging.lua
+modules/Slash.lua
+
+Kaydee.xml
