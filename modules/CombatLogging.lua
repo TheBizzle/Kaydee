@@ -3,7 +3,7 @@ local L10N = KaydeeUF.L10N
 -- (Encounter) => Unit
 local function saveEncounter(encounter)
 
-  table.insert(Kaydee.db.profile.encounters, encounter)
+  Kaydee.putEncounter(encounter)
   table.insert(Kaydee.myEncounters, encounter)
 
   if encounter.winnerID ~= UnitGUID("player") then
@@ -14,8 +14,8 @@ local function saveEncounter(encounter)
     Kaydee.addToOverlord(Kaydee.allEncounters, encounter.loserID, encounter)
   end
 
-  Kaydee.db.profile.guidToName[encounter.winnerID] = Kaydee.getNameByGUID(encounter.winnerID)
-  Kaydee.db.profile.guidToName[encounter. loserID] = Kaydee.getNameByGUID(encounter. loserID)
+  Kaydee.putGUIDToName(encounter.winnerID, Kaydee.getNameByGUID(encounter.winnerID))
+  Kaydee.putGUIDToName(encounter. loserID, Kaydee.getNameByGUID(encounter. loserID))
 
 end
 

@@ -56,7 +56,7 @@ local function encountersToBins(unit, encounters)
       -- we can't look up their info --Bizzle (8/19/19)
       local name =
         Kaydee.getNameByGUID(id) or
-        Kaydee.db.profile.guidToName[id] or
+        Kaydee.getGUIDToName()[id] or
         id
 
       bins[id] = { subjectName = name, wins = 0, losses = 0 }
