@@ -9,6 +9,7 @@ function Kaydee:OnInitialize()
   self.db = LibStub("AceDB-3.0"):New("KaydeeDB", {
     profile = {
       encounters = {}
+    , guidToName = {}
     },
   })
 

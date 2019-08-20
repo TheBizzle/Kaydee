@@ -25,3 +25,13 @@ end
 function Kaydee.endsWith(str, suffix)
    return suffix == "" or str:sub(-#suffix) == suffix
 end
+
+-- (GUID) => String?
+function Kaydee.getNameByGUID(guid)
+  if GetPlayerInfoByGUID(guid) ~= nil then
+    _, _, _, _, _, name, server = GetPlayerInfoByGUID(guid)
+    return name
+  else
+    return nil
+  end
+end

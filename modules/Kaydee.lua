@@ -52,13 +52,12 @@ local function encountersToBins(unit, encounters)
 
     if bins[id] == nil then
 
-      name, server = nil, nil
-
-      if GetPlayerInfoByGUID(id) ~= nil then
-        _, _, _, _, _, name, server = GetPlayerInfoByGUID(id)
-      else -- When our client hasn't seen this GUID yet... --Bizzle (8/19/19)
-        name, server = id, "???"
-      end
+      -- If our client hasn't seen the GUID yet,
+      -- we can't look up their info --Bizzle (8/19/19)
+      local name =
+        Kaydee.getNameByGUID(id) or
+        Kaydee.db.profile.guidToName[id] or
+        id
 
       bins[id] = { subjectName = name, wins = 0, losses = 0 }
 

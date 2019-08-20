@@ -14,6 +14,9 @@ local function saveEncounter(encounter)
     Kaydee.addToOverlord(Kaydee.allEncounters, encounter.loserID, encounter)
   end
 
+  Kaydee.db.profile.guidToName[encounter.winnerID] = Kaydee.getNameByGUID(encounter.winnerID)
+  Kaydee.db.profile.guidToName[encounter. loserID] = Kaydee.getNameByGUID(encounter. loserID)
+
 end
 
 -- (Table[_, _], String) => Unit
