@@ -8,7 +8,7 @@ local L10N = KaydeeUF.L10N
 -- type KillingBlow  = { damageSourceID: Number, damageAmount: Number, damageModifiers: Array[Modifier] }
 -- type Encounter    = { winnerID: GUID, loserID: GUID, locationID: MapID, timestamp: Number, killingBlow: KillingBlow }
 -- type Bundle       = { version: String, combats = Array[Encounter] }
--- type Bin          = { subjectName: String, wins: Number, losses: Number, draws: Number }
+-- type Bin          = { subjectName: String, wins: Number, losses: Number }
 
 -- () => Array[GUID]
 local function guidsICareAbout()
