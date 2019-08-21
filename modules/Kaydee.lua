@@ -15,11 +15,10 @@ local function guidsICareAbout()
   return { [UnitGUID("player")] = true }
 end
 
--- (UnitString) => Array[Encounter]
-local function myEncountersWith(unit)
+-- (GUID) => Array[Encounter]
+local function myCaredEncountersWith(guid)
 
   local myGUID     = UnitGUID("player")
-  local guid       = UnitGUID(unit)
   local encounters = {}
   local cares      = guidsICareAbout()
 
@@ -33,10 +32,8 @@ local function myEncountersWith(unit)
 
 end
 
--- (UnitString, Array[Encounter]) => Array[Bin]
-local function encountersToBins(unit, encounters)
-
-  local guid = UnitGUID(unit)
+-- (GUID, Array[Encounter]) => Array[Bin]
+local function encountersToBins(guid, encounters)
 
   local bins = {}
 
@@ -111,9 +108,10 @@ C_Timer.NewTicker(30 * 60, Kaydee.syncWithBuddies)
 -- (GameTooltip) => Unit
 local function handleTooltip(self)
   local unit = select(2, self:GetUnit())
+  local guid = UnitGUID(unit)
   if UnitIsPlayer(unit) then
-    local encounters = myEncountersWith(unit)
-    local bins       = encountersToBins(unit, encounters)
+    local encounters = myCaredEncountersWith(guid)
+    local bins       = encountersToBins(guid, encounters)
     for i, bin in ipairs(bins) do
       self:AddLine(binToString(bin))
     end
