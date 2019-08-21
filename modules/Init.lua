@@ -52,7 +52,6 @@ end
 -- (Encounter) => Unit
 function Kaydee.putEncounter(encounter)
   table.insert(encountersDB, encounter)
-  Kaydee.db.profile.encounters = LibDeflate:CompressDeflate(Kaydee:Serialize(encountersDB))
 end
 
 -- () => Table[GUID, String]
@@ -63,5 +62,18 @@ end
 -- (GUID, String) => Unit
 function Kaydee.putGUIDToName(guid, name)
   guidToNameDB[guid] = name
-  Kaydee.db.profile.guidToName = LibDeflate:CompressDeflate(Kaydee:Serialize(guidToNameDB))
 end
+
+Kaydee:RegisterComm("KAYDEE_DB_UPDATE", handleDBUpdate)
+
+-- (Table[_, _], String) => Unit
+local function handleLogout(self, event)
+  if event == "PLAYER_LOGOUT" then
+    Kaydee.db.profile.encounters = LibDeflate:CompressDeflate(Kaydee:Serialize(encountersDB))
+    Kaydee.db.profile.guidToName = LibDeflate:CompressDeflate(Kaydee:Serialize(guidToNameDB))
+  end
+end
+
+local frame = CreateFrame("Frame")
+frame:RegisterEvent("PLAYER_LOGOUT")
+frame:SetScript("OnEvent", handleLogout)

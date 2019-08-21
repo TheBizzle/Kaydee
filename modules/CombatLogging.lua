@@ -110,7 +110,6 @@ local function handleCombatLogEvent(self, event)
 
 end
 
-
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 frame:SetScript("OnEvent", handleCombatLogEvent)
