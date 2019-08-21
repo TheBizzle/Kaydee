@@ -12,7 +12,33 @@ local L10N = KaydeeUF.L10N
 
 -- () => Array[GUID]
 local function guidsICareAbout()
-  return { [UnitGUID("player")] = true }
+
+  local myGUIDs = { UnitGUID("player") }
+
+  local friendGUIDs = {}
+  for i = 1, GetNumFriends(), 1 do
+    local guid = (select(9, GetFriendInfo(i)))
+    table.insert(friendGUIDs, guid)
+  end
+
+  local guildGUIDs = {}
+  if IsInGuild() then
+    GuildRoster()
+    for j = 1, GetNumGuildMembers(), 1 do
+      local guid = (select(17, GetGuildRosterInfo(j)))
+      table.insert(guildGUIDs, guid)
+    end
+  end
+
+  local out = {}
+  for i, array in ipairs({ myGUIDs, friendGUIDs, guildGUIDs }) do
+    for j, item in ipairs(array) do
+      out[item] = true
+    end
+  end
+
+  return out
+
 end
 
 -- (GUID) => Array[Encounter]
