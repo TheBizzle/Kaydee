@@ -42,6 +42,8 @@ function Kaydee:OnInitialize()
 
   self:RegisterChatCommand("kaydee", "SlashKaydee")
 
+  Kaydee.syncWithBuddies()
+
 end
 
 -- () => Array[Encounter]
