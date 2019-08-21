@@ -42,7 +42,7 @@ function Kaydee:OnInitialize()
 
   self:RegisterChatCommand("kaydee", "SlashKaydee")
 
-  Kaydee.syncWithBuddies()
+  C_Timer.NewTimer(30, Kaydee.syncWithBuddies)
 
 end
 
