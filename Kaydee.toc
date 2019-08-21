@@ -14,6 +14,7 @@ locales/deDE.lua
 
 modules/Init.lua
 modules/Util.lua
+modules/Sync.lua
 modules/Kaydee.lua
 modules/CombatLogging.lua
 modules/Slash.lua
