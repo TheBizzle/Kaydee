@@ -3,6 +3,7 @@ local L10N = KaydeeUF.L10N
 local helpLines =
   { "Kaydee"
   , "- help"
+  , "- sync"
   }
 
 -- () => Unit
@@ -14,6 +15,8 @@ function Kaydee:SlashKaydee(input)
     for i, line in ipairs(helpLines) do
       print(line)
     end
+  elseif command == "sync" then
+    Kaydee.syncWithBuddies()
   else
     print(L10N["Unknown command"] .. ": " .. command)
   end

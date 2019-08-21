@@ -84,6 +84,30 @@ local function binToString(bin)
   return bin.subjectName .. ": " .. bin.wins .. "/" .. bin.losses
 end
 
+-- () => Unit
+function Kaydee.syncWithBuddies()
+
+  local profile       = Kaydee.db.profile
+  local db            = { encounters = profile.encounters, guidToName = profile.guidToName }
+  local str           = Kaydee:Serialize(db)
+  local compressed, _ = LibDeflate:CompressDeflate(str)
+  local encoded       = LibDeflate:EncodeForWoWAddonChannel(compressed)
+
+  if IsInGuild() then
+    Kaydee:SendCommMessage("KAYDEE_DB_UPDATE", encoded, "GUILD", nil, "BULK")
+  end
+
+  for i = 1, GetNumFriends(), 1 do
+    local name, _, _, _, isOnline = GetFriendInfo(i)
+    if isOnline then
+      Kaydee:SendCommMessage("KAYDEE_DB_UPDATE", encoded, "WHISPER", name, "BULK")
+    end
+  end
+
+end
+
+C_Timer.NewTicker(30 * 60, Kaydee.syncWithBuddies)
+
 -- (GameTooltip) => Unit
 local function handleTooltip(self)
   local unit = select(2, self:GetUnit())

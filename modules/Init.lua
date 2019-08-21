@@ -1,4 +1,4 @@
-Kaydee = LibStub("AceAddon-3.0"):NewAddon("Kaydee", "AceConsole-3.0", "AceSerializer-3.0")
+Kaydee = LibStub("AceAddon-3.0"):NewAddon("Kaydee", "AceComm-3.0", "AceConsole-3.0", "AceSerializer-3.0")
 LibDeflate = LibStub:GetLibrary("LibDeflate")
 
 Kaydee.myEncounters  = {} -- Array[Encounter]
@@ -62,6 +62,68 @@ end
 -- (GUID, String) => Unit
 function Kaydee.putGUIDToName(guid, name)
   guidToNameDB[guid] = name
+end
+
+-- (String, String, String, String) => Unit
+local function handleDBUpdate(messagePrefix, message, distType, senderName)
+
+  local decoded         = LibDeflate:DecodeForWoWAddonChannel(message)
+  local decompressed    = LibDeflate:DecompressDeflate(decoded)
+  local _, deserialized = Kaydee:Deserialize(decompressed)
+
+  local _, encounters = Kaydee:Deserialize(LibDeflate:DecompressDeflate(deserialized.encounters))
+  local _, guidToName = Kaydee:Deserialize(LibDeflate:DecompressDeflate(deserialized.guidToName))
+
+  local function dumpArr(arr)
+    local acc = ""
+    for i, x in ipairs(arr) do
+      acc = acc .. x
+      if i ~= getn(arr) then
+        acc = acc .. ","
+      end
+    end
+    return acc
+  end
+
+  local function encounterToKey(e)
+    return         e.winnerID                     .. "_"
+        ..         e.loserID                      .. "_"
+        ..         e.killingBlow.damageSourceID   .. "_"
+        ..         e.killingBlow.damageAmount     .. "_"
+        .. dumpArr(e.killingBlow.damageModifiers)
+  end
+
+  local function anyTemporallyNearby(db, e)
+    for i, encounter in ipairs(db) do
+      if math.abs(encounter.timestamp - e.timestamp) < 10 then
+        return true
+      end
+    end
+    return false
+  end
+
+  local encounterSet = {}
+  for i, encounter in ipairs(encountersDB) do
+    encounterSet[encounterToKey(encounter)] = true
+  end
+
+  -- Some things are absolute, and some are not.
+  -- The timestamp is not absolute.  They can differ
+  -- a bit.  So we allow about 10 seconds of mismatch.
+  -- --TheBizzle (8/20/19)
+  for i, encounter in ipairs(encounters) do
+    if not (
+         encounterSet[encounterToKey(encounter)] and
+         anyTemporallyNearby(encountersDB, encounter)
+       ) then
+        table.insert(encountersDB, encounter)
+    end
+  end
+
+  for guid, name in pairs(guidToName) do
+    guidToNameDB[guid] = name
+  end
+
 end
 
 Kaydee:RegisterComm("KAYDEE_DB_UPDATE", handleDBUpdate)
