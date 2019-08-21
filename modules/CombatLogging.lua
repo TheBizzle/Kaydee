@@ -24,7 +24,10 @@ local function handleCombatLogEvent(self, event)
 
   if event == "COMBAT_LOG_EVENT_UNFILTERED" then
 
-    local timestamp, combatEvent = CombatLogGetCurrentEventInfo()
+    -- The first arg here is a timestamp.  But we don't want this one.
+    -- It's the client's local PC time.  What we want is the server time.
+    -- --TheBizzle (8/20/19)
+    local _, combatEvent = CombatLogGetCurrentEventInfo()
 
     if Kaydee.endsWith(combatEvent, "_DAMAGE") then
 
@@ -94,7 +97,7 @@ local function handleCombatLogEvent(self, event)
             { winnerID    = sourceGUID
             , loserID     = destGUID
             , locationID  = C_Map.GetBestMapForUnit("player")
-            , timestamp   = timestamp
+            , timestamp   = GetServerTime()
             , killingBlow = killingBlow
             }
 
