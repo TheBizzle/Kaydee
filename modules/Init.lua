@@ -117,6 +117,8 @@ local function handleDBUpdate(messagePrefix, message, distType, senderName)
          anyTemporallyNearby(encountersDB, encounter)
        ) then
         table.insert(encountersDB, encounter)
+        Kaydee.addToOverlord(Kaydee.allEncounters, encounter.winnerID, encounter)
+        Kaydee.addToOverlord(Kaydee.allEncounters, encounter.loserID, encounter)
     end
   end
 
