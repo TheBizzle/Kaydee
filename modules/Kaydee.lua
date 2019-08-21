@@ -102,6 +102,37 @@ local function encountersToBins(guid, encounters)
 
 end
 
+-- (Array[Bin]) => Array[Bin]
+local function organize(bins)
+
+  local myName    = Kaydee.getNameByGUID(UnitGUID("player"))
+  local myBin     = nil
+  local otherBins = {}
+
+  for i, bin in ipairs(bins) do
+    if bin.subjectName == myName then
+      myBin = bin
+    else
+      table.insert(otherBins, bin)
+    end
+  end
+
+  local function sortFunc(a, b)
+    return (a.wins + a.losses) > (b.wins + b.losses)
+  end
+
+  table.sort(otherBins, sortFunc)
+  table.insert(otherBins, 1, myBin)
+
+  local out = {}
+  for i = 1, math.min(20, getn(otherBins)), 1 do
+    table.insert(out, otherBins[i])
+  end
+
+  return out
+
+end
+
 -- (Bin) => String
 local function binToString(bin)
   return bin.subjectName .. ": " .. bin.wins .. "/" .. bin.losses
@@ -114,7 +145,8 @@ local function handleTooltip(self)
   if UnitIsPlayer(unit) then
     local encounters = myCaredEncountersWith(guid)
     local bins       = encountersToBins(guid, encounters)
-    for i, bin in ipairs(bins) do
+    local filBins    = organize(bins)
+    for i, bin in ipairs(filBins) do
       self:AddLine(binToString(bin))
     end
   end
