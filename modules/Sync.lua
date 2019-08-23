@@ -61,7 +61,7 @@ local function handleDBUpdate(messagePrefix, message, distType, senderName)
   forEach(addNews)(encounters)
 
   for guid, name in pairs(guidToName) do
-    guidToName[guid] = name
+    Kaydee.putGUIDToName(guid, name)
   end
 
 end
