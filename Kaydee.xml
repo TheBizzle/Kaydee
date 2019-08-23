@@ -19,7 +19,7 @@
     <HighlightFont style="GameFontHighlightSmall" />
   </Button>
 
-  <Frame name="KaydeeHistoryFrame" hidden="true">
+  <Frame name="KaydeeHistoryFrame" frameStrata="DIALOG" hidden="true">
 
     <Size x="600" y="410" />
     <Anchors>
