@@ -13,7 +13,7 @@ local historyLines = {}
 -- (KillingBlow) => String
 local function getAbilityName(kb)
   if kb.damageSourceID == -665 then
-    return "Attack (swing)"
+    return L10N["Attack (swing)"]
   else
     local spellName, spellRank = GetSpellInfo(kb.damageSourceID)
     if spellRank ~= nil then
@@ -27,7 +27,7 @@ end
 -- (KillingBlow) => String
 local function getCritSnippet(kb)
   if contains("crit")(kb.damageModifiers) then
-    return "a crit on "
+    return L10N["a crit on"] .. " "
   else
     return ""
   end
@@ -43,29 +43,33 @@ local function getDespiteSnippet(kb)
   local modifiers = {}
 
   if wasResisted then
-    table.insert(modifiers, "resisted")
+    table.insert(modifiers, L10N["resisted"])
   end
 
   if wasBlocked then
-    table.insert(modifiers, "blocked")
+    table.insert(modifiers, L10N["blocked"])
   end
 
   if wasAbsorbed then
-    table.insert(modifiers, "absorbed")
+    table.insert(modifiers, L10N["absorbed"])
   end
 
   if getn(modifiers) == 0 then
-    return "No modifiers"
+    return L10N["No modifiers"]
   else
-    return "Partially " .. table.concat(modifiers, " and ")
+    return L10N["Partially"] .. " " .. table.concat(modifiers, " " .. L10N["and"] .. " ")
   end
 
 end
 
 -- (GUID) => String
-local function getName(guid)
+local function getName(guid, isNominative)
   if guid == UnitGUID("player") then
-    return "YOU"
+    if isNominative then
+      return string.upper(L10N["you_nominative"])
+    else
+      return string.upper(L10N["you_accusative"])
+    end
   else
     return Kaydee.getGUIDToName()[guid]
   end
@@ -78,16 +82,41 @@ local function toRow(e)
   local abilityName    = getAbilityName(kb)
   local critSnippet    = getCritSnippet(kb)
   local despiteSnippet = getDespiteSnippet(kb)
-  local winnerName     = getName(e.winnerID)
-  local loserName      = getName(e.loserID)
+  local winnerName     = getName(e.winnerID, true)
+  local loserName      = getName(e.loserID, false)
+
+  local defeatedStr
+  if e.winnerID == UnitGUID("player") then
+    defeatedStr = L10N["defeated_byyou"]
+  else
+    defeatedStr = L10N["defeated_bythem"]
+  end
 
   local settingRow =
     date("%x", e.timestamp) .. " | " .. date("%X", e.timestamp) .. " | " ..
       C_Map.GetMapInfo(e.locationID)["name"]
 
-  local businessRow =
-    winnerName .. " defeated " .. loserName .. " with " ..
-      critSnippet .. "a " .. kb.damageAmount .. " damage " .. abilityName
+  local businessRow
+  if GetLocale() ~= "esMX" and GetLocale() ~= "esES" then
+    businessRow =
+      winnerName .. " " .. defeatedStr .. " " .. loserName .. " " .. L10N["with"] ..
+        " " .. critSnippet .. L10N["a#"] .. " " .. kb.damageAmount .. " " ..
+        L10N["damage#"] .. " " .. abilityName
+  else
+
+    local chunk
+    if e.loserID == UnitGUID("player") then
+      chunk = loserName .. " " .. defeatedStr
+    else
+      chunk = defeatedStr .. " " .. loserName
+    end
+
+    businessRow =
+      winnerName .. " " .. chunk .. " " .. L10N["with"] ..
+        " " .. critSnippet .. L10N["a#"] .. " " .. abilityName .. " de " ..
+        kb.damageAmount .. " " .. L10N["damage#"]
+
+  end
 
   return settingRow .. "\n" .. businessRow .. "\n" .. despiteSnippet
 

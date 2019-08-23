@@ -34,7 +34,7 @@
 
     <Layers>
       <Layer>
-        <FontString name="KaydeeHistoryTitleText" font="GameFontNormalLarge" text="Kaydee: Your History">
+        <FontString name="KaydeeHistoryTitleText" font="GameFontNormalLarge">
           <Size x="400" y="30" />
           <Anchors>
             <Anchor point="TOP" y="-13" />
@@ -149,6 +149,9 @@
 
     <Scripts>
       <OnKeyDown>if key == "ESCAPE" then self:Hide() end</OnKeyDown>
+      <OnLoad>
+        KaydeeHistoryTitleText:SetText("Kaydee: " .. KaydeeUF.L10N["Your History"])
+      </OnLoad>
     </Scripts>
 
   </Frame>
