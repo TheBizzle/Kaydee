@@ -16,9 +16,10 @@ function Kaydee:OnInitialize()
 
   self.db = LibStub("AceDB-3.0"):New("KaydeeDB", {
     profile = {
-      encounters = emptyTable
-    , guidToName = emptyTable
-    , minimap    = {}
+      encounters    = emptyTable
+    , guidToName    = emptyTable
+    , minimap       = {}
+    , syncIsEnabled = true
     },
   })
 
@@ -49,7 +50,11 @@ function Kaydee:OnInitialize()
   Kaydee.icon:Register("KaydeeIcon", Kaydee.ldb, Kaydee.db.profile.minimap)
   self:RegisterChatCommand("kaydee", "SlashKaydee")
 
-  C_Timer.NewTimer(30, Kaydee.syncWithBuddies)
+  if Kaydee.db.profile.syncIsEnabled then
+    C_Timer.NewTimer (30     , Kaydee.syncWithBuddies)
+    C_Timer.NewTicker(30 * 60, Kaydee.syncWithBuddies)
+    Kaydee:RegisterComm("KAYDEE_DB_UPDATE", Kaydee.handleDBUpdate)
+  end
 
 end
 

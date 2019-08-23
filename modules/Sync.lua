@@ -7,7 +7,7 @@ local toTable = Brazier.Array.toTable
 local pipeline = Brazier.Function.pipeline
 
 -- (String, String, String, String) => Unit
-local function handleDBUpdate(messagePrefix, message, distType, senderName)
+function Kaydee.handleDBUpdate(messagePrefix, message, distType, senderName)
 
   local decoded         = LibDeflate:DecodeForWoWAddonChannel(message)
   local decompressed    = LibDeflate:DecompressDeflate(decoded)
@@ -66,8 +66,6 @@ local function handleDBUpdate(messagePrefix, message, distType, senderName)
 
 end
 
-Kaydee:RegisterComm("KAYDEE_DB_UPDATE", handleDBUpdate)
-
 -- () => Unit
 function Kaydee.syncWithBuddies()
 
@@ -89,5 +87,3 @@ function Kaydee.syncWithBuddies()
   end
 
 end
-
-C_Timer.NewTicker(30 * 60, Kaydee.syncWithBuddies)
