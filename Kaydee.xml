@@ -146,6 +146,11 @@
       </Button>
 
     </Frames>
+
+    <Scripts>
+      <OnKeyDown>if key == "ESCAPE" then self:Hide() end</OnKeyDown>
+    </Scripts>
+
   </Frame>
 
 </Ui>
