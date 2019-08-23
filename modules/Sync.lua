@@ -32,7 +32,7 @@ local function handleDBUpdate(messagePrefix, message, distType, senderName)
   -- a bit.  So we allow about 10 seconds of mismatch.
   -- --TheBizzle (8/20/19)
   local function anyTemporallyNearby(db, e)
-    exists(
+    return exists(
       function(encounter)
         return math.abs(encounter.timestamp - e.timestamp) < 10
       end
