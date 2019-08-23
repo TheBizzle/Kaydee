@@ -1,3 +1,5 @@
+local forEach = Brazier.Array.forEach
+
 Kaydee = LibStub("AceAddon-3.0"):NewAddon("Kaydee", "AceComm-3.0", "AceConsole-3.0", "AceSerializer-3.0")
 LibDeflate = LibStub:GetLibrary("LibDeflate")
 
@@ -24,21 +26,24 @@ function Kaydee:OnInitialize()
 
   local myGUID = UnitGUID("player")
 
-  for i, encounter in ipairs(Kaydee.getEncounters()) do
+  local categorize =
+    function(encounter)
 
-    if encounter.winnerID == myGUID or encounter.loserID == myGUID then
-      table.insert(Kaydee.myEncounters, encounter)
+      if encounter.winnerID == myGUID or encounter.loserID == myGUID then
+        table.insert(Kaydee.myEncounters, encounter)
+      end
+
+      if encounter.winnerID ~= myGUID then
+        Kaydee.addToOverlord(Kaydee.allEncounters, encounter.winnerID, encounter)
+      end
+
+      if encounter.loserID ~= myGUID then
+        Kaydee.addToOverlord(Kaydee.allEncounters, encounter.loserID, encounter)
+      end
+
     end
 
-    if encounter.winnerID ~= myGUID then
-      Kaydee.addToOverlord(Kaydee.allEncounters, encounter.winnerID, encounter)
-    end
-
-    if encounter.loserID ~= myGUID then
-      Kaydee.addToOverlord(Kaydee.allEncounters, encounter.loserID, encounter)
-    end
-
-  end
+  forEach(categorize)(Kaydee.getEncounters())
 
   self:RegisterChatCommand("kaydee", "SlashKaydee")
 

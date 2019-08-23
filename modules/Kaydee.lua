@@ -1,5 +1,16 @@
 local L10N = KaydeeUF.L10N
 
+local append      = Brazier.Array.append
+local foldl       = Brazier.Array.foldl
+local flattenDeep = Brazier.Array.flattenDeep
+local forEach     = Brazier.Array.forEach
+local map         = Brazier.Array.map
+local toTable     = Brazier.Array.toTable
+
+local pipeline    = Brazier.Function.pipeline
+
+local values      = Brazier.Table.values
+
 -- type GUID       = String
 -- type MapID      = Number
 -- type UnitString = String
@@ -30,31 +41,31 @@ local function guidsICareAbout()
     end
   end
 
-  local out = {}
-  for i, array in ipairs({ myGUIDs, friendGUIDs, guildGUIDs }) do
-    for j, item in ipairs(array) do
-      out[item] = true
-    end
-  end
-
-  return out
+  return
+    pipeline(
+      flattenDeep
+    , map(function(x) return { x, true } end)
+    , toTable
+    )({ myGUIDs, friendGUIDs, guildGUIDs })
 
 end
 
 -- (GUID) => Array[Encounter]
 local function myCaredEncountersWith(guid)
 
-  local myGUID     = UnitGUID("player")
-  local encounters = {}
-  local cares      = guidsICareAbout()
+  local myGUID = UnitGUID("player")
+  local cares  = guidsICareAbout()
 
-  for i, encounter in ipairs(Kaydee.allEncounters[guid] or {}) do
-    if cares[encounter.winnerID] or cares[encounter.loserID] then
-      table.insert(encounters, encounter)
+  local aggregateCares =
+    function(acc, encounter)
+      if cares[encounter.winnerID] or cares[encounter.loserID] then
+        return append(encounter)(acc)
+      else
+        return acc
+      end
     end
-  end
 
-  return encounters
+  return foldl(aggregateCares)({})(Kaydee.allEncounters[guid] or {})
 
 end
 
@@ -63,42 +74,41 @@ local function encountersToBins(guid, encounters)
 
   local bins = {}
 
-  for i, encounter in ipairs(encounters) do
+  local populateBinWith =
+    function(encounter)
 
-    local id = nil
+      local id = nil
 
-    if encounter.winnerID == guid then
-      id = encounter.loserID
-    elseif encounter.loserID == guid then
-      id = encounter.winnerID
+      if encounter.winnerID == guid then
+        id = encounter.loserID
+      elseif encounter.loserID == guid then
+        id = encounter.winnerID
+      end
+
+      if bins[id] == nil then
+
+        -- If our client hasn't seen the GUID yet,
+        -- we can't look up their info --Bizzle (8/19/19)
+        local name =
+          Kaydee.getNameByGUID(id) or
+          Kaydee.getGUIDToName()[id] or
+          id
+
+        bins[id] = { subjectName = name, wins = 0, losses = 0 }
+
+      end
+
+      if guid == encounter.loserID then
+        bins[id].wins = bins[id].wins + 1
+      else
+        bins[id].losses = bins[id].losses + 1
+      end
+
     end
 
-    if bins[id] == nil then
+  forEach(populateBinWith)(encounters)
 
-      -- If our client hasn't seen the GUID yet,
-      -- we can't look up their info --Bizzle (8/19/19)
-      local name =
-        Kaydee.getNameByGUID(id) or
-        Kaydee.getGUIDToName()[id] or
-        id
-
-      bins[id] = { subjectName = name, wins = 0, losses = 0 }
-
-    end
-
-    local bin = bins[id]
-
-    if guid == encounter.loserID then
-      bin.wins = bin.wins + 1
-    else
-      bin.losses = bin.losses + 1
-    end
-
-    bins[id] = bin
-
-  end
-
-  return Kaydee.tableValues(bins)
+  return values(bins)
 
 end
 
@@ -109,13 +119,15 @@ local function organize(bins)
   local myBin     = nil
   local otherBins = {}
 
-  for i, bin in ipairs(bins) do
-    if bin.subjectName == myName then
-      myBin = bin
-    else
-      table.insert(otherBins, bin)
+  forEach(
+    function(bin)
+      if bin.subjectName == myName then
+        myBin = bin
+      else
+        table.insert(otherBins, bin)
+      end
     end
-  end
+  )(bins)
 
   local function sortFunc(a, b)
     return (a.wins + a.losses) > (b.wins + b.losses)
@@ -146,9 +158,7 @@ local function handleTooltip(self)
     local encounters = myCaredEncountersWith(guid)
     local bins       = encountersToBins(guid, encounters)
     local filBins    = organize(bins)
-    for i, bin in ipairs(filBins) do
-      self:AddLine(binToString(bin))
-    end
+    pipeline(map(binToString), forEach(function(x) self:AddLine(x) end))(filBins)
   end
 end
 

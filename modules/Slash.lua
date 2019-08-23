@@ -1,5 +1,7 @@
 local L10N = KaydeeUF.L10N
 
+local forEach = Brazier.Array.forEach
+
 local helpLines =
   { "Kaydee"
   , "- help"
@@ -12,9 +14,7 @@ function Kaydee:SlashKaydee(input)
   local _, _, command, args = string.find(input, "%s*(%w+)%s?(.*)")
 
   if command == "" or command == nil or command == "help" then
-    for i, line in ipairs(helpLines) do
-      print(line)
-    end
+    forEach(print)(helpLines)
   elseif command == "sync" then
     Kaydee.syncWithBuddies()
   elseif command == "history" then

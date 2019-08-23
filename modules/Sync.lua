@@ -1,3 +1,11 @@
+local exists  = Brazier.Array.exists
+local foldl   = Brazier.Array.foldl
+local forEach = Brazier.Array.forEach
+local map     = Brazier.Array.map
+local toTable = Brazier.Array.toTable
+
+local pipeline = Brazier.Function.pipeline
+
 -- (String, String, String, String) => Unit
 local function handleDBUpdate(messagePrefix, message, distType, senderName)
 
@@ -8,56 +16,49 @@ local function handleDBUpdate(messagePrefix, message, distType, senderName)
   local _, encounters = Kaydee:Deserialize(LibDeflate:DecompressDeflate(deserialized.encounters))
   local _, guidToName = Kaydee:Deserialize(LibDeflate:DecompressDeflate(deserialized.guidToName))
 
-  local function dumpArr(arr)
-    local acc = ""
-    for i, x in ipairs(arr) do
-      acc = acc .. x
-      if i ~= getn(arr) then
-        acc = acc .. ","
-      end
-    end
-    return acc
-  end
-
   local function encounterToKey(e)
-    return         e.winnerID                     .. "_"
-        ..         e.loserID                      .. "_"
-        ..         e.killingBlow.damageSourceID   .. "_"
-        ..         e.killingBlow.damageAmount     .. "_"
-        .. dumpArr(e.killingBlow.damageModifiers)
+    return              e.winnerID                     .. "_"
+        ..              e.loserID                      .. "_"
+        ..              e.killingBlow.damageSourceID   .. "_"
+        ..              e.killingBlow.damageAmount     .. "_"
+        .. table.concat(e.killingBlow.damageModifiers, ",")
   end
 
   local encountersDB = Kaydee.getEncounters()
   local guidToName   = Kaydee.getGUIDToName()
 
-  local function anyTemporallyNearby(db, e)
-    for i, encounter in ipairs(db) do
-      if math.abs(encounter.timestamp - e.timestamp) < 10 then
-        return true
-      end
-    end
-    return false
-  end
-
-  local encounterSet = {}
-  for i, encounter in ipairs(encountersDB) do
-    encounterSet[encounterToKey(encounter)] = true
-  end
-
   -- Some things are absolute, and some are not.
   -- The timestamp is not absolute.  They can differ
   -- a bit.  So we allow about 10 seconds of mismatch.
   -- --TheBizzle (8/20/19)
-  for i, encounter in ipairs(encounters) do
-    if not (
-         encounterSet[encounterToKey(encounter)] and
-         anyTemporallyNearby(encountersDB, encounter)
-       ) then
-        Kaydee.putEncounter(encounter)
-        Kaydee.addToOverlord(Kaydee.allEncounters, encounter.winnerID, encounter)
-        Kaydee.addToOverlord(Kaydee.allEncounters, encounter.loserID, encounter)
-    end
+  local function anyTemporallyNearby(db, e)
+    exists(
+      function(encounter)
+        return math.abs(encounter.timestamp - e.timestamp) < 10
+      end
+    )(db)
   end
+
+  local encounterSet =
+    pipeline(
+      map(encounterToKey)
+    , map(function(key) return { key, true } end)
+    , toTable
+    )(encountersDB)
+
+  local addNews =
+    function(encounter)
+      if not (
+           encounterSet[encounterToKey(encounter)] and
+           anyTemporallyNearby(encountersDB, encounter)
+         ) then
+          Kaydee.putEncounter(encounter)
+          Kaydee.addToOverlord(Kaydee.allEncounters, encounter.winnerID, encounter)
+          Kaydee.addToOverlord(Kaydee.allEncounters, encounter. loserID, encounter)
+      end
+    end
+
+  forEach(addNews)(encounters)
 
   for guid, name in pairs(guidToName) do
     guidToName[guid] = name

@@ -1,5 +1,13 @@
 local L10N = KaydeeUF.L10N
 
+local append   = Brazier.Array.append
+local contains = Brazier.Array.contains
+local foldl    = Brazier.Array.foldl
+local map      = Brazier.Array.map
+local sortBy   = Brazier.Array.sortBy
+
+local pipeline = Brazier.Function.pipeline
+
 local historyLines = {}
 
 -- (KillingBlow) => String
@@ -18,7 +26,7 @@ end
 
 -- (KillingBlow) => String
 local function getCritSnippet(kb)
-  if Kaydee.contains(kb.damageModifiers, "crit") then
+  if contains("crit")(kb.damageModifiers) then
     return "a crit on "
   else
     return ""
@@ -28,9 +36,9 @@ end
 -- (KillingBlow) => String
 local function getDespiteSnippet(kb)
 
-  local wasResisted = Kaydee.contains(kb.damageModifiers, "resist")
-  local wasBlocked  = Kaydee.contains(kb.damageModifiers, "block")
-  local wasAbsorbed = Kaydee.contains(kb.damageModifiers, "absorb")
+  local wasResisted = contains("resist")(kb.damageModifiers)
+  local wasBlocked  = contains( "block")(kb.damageModifiers)
+  local wasAbsorbed = contains("absorb")(kb.damageModifiers)
 
   local modifiers = {}
 
@@ -116,12 +124,12 @@ end
 -- () => Unit
 function Kaydee.showHistory()
 
-  table.sort(Kaydee.myEncounters, function(a, b) return a.timestamp > b.timestamp end)
-
-  historyLines = {}
-  for i, encounter in ipairs(Kaydee.myEncounters) do
-    table.insert(historyLines, toRow(encounter))
-  end
+  historyLines =
+    pipeline(
+      sortBy(function(x) return -x.timestamp end)
+    , map(toRow)
+    , foldl(function(acc, x) return append(x)(acc) end)({})
+    )(Kaydee.myEncounters)
 
   KaydeeHistoryFrame:Show()
 

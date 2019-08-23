@@ -2,7 +2,7 @@
 ## Title: Kaydee
 ## Author: TheBizzle
 ## Version: 0.0.1
-## Dependencies: LibDBIcon-1.0, LibDeflate
+## Dependencies: LibBrazier, LibDBIcon-1.0, LibDeflate
 ## SavedVariables: KaydeeDB
 ## X-Donate: www.github.com/TheBizzle
 ## X-License: BSD-3
