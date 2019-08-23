@@ -57,7 +57,7 @@ local function getDespiteSnippet(kb)
   if getn(modifiers) == 0 then
     return "No modifiers"
   else
-    return "Partially" .. table.concat(modifiers, " and ")
+    return "Partially " .. table.concat(modifiers, " and ")
   end
 
 end
