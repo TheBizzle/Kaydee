@@ -18,6 +18,7 @@ modules/Sync.lua
 modules/Kaydee.lua
 modules/History.lua
 modules/CombatLogging.lua
+modules/Minimap.lua
 modules/Slash.lua
 
 Kaydee.xml

@@ -18,6 +18,7 @@ function Kaydee:OnInitialize()
     profile = {
       encounters = emptyTable
     , guidToName = emptyTable
+    , minimap    = {}
     },
   })
 
@@ -45,6 +46,7 @@ function Kaydee:OnInitialize()
 
   forEach(categorize)(Kaydee.getEncounters())
 
+  Kaydee.icon:Register("KaydeeIcon", Kaydee.ldb, Kaydee.db.profile.minimap)
   self:RegisterChatCommand("kaydee", "SlashKaydee")
 
   C_Timer.NewTimer(30, Kaydee.syncWithBuddies)
