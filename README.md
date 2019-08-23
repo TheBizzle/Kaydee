@@ -20,7 +20,7 @@ The tooltip will display up to 20 K/D records.  It always shows yours (if applic
 
 ## "Your History"
 
-Clicking on the Kaydee minimap icon or running the `/kaydee history` command will show the "Your History" window:
+Clicking on the Kaydee minimap icon (the same icon as the Warrior ability Revenge) or running the `/kaydee history` command will show the "Your History" window:
 
 ![Kaydee English UI](https://i.ibb.co/SJvvQVC/Kaydee-English.png)
 
