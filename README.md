@@ -32,21 +32,21 @@ I have noticed that the addon causes subtantial pauses when there are thousands 
 
   1. Allowing the user to toggle Kaydee's logging off (e.g. in preparation for engaging in a 14-hour session of Rank 14 honor grinding)
   2. Aloowing the user to configure a time period for deleting and ignoring old records (e.g. "no longer store records about PvP encounters from over a month ago")
-  3. Allowing the user to disable syncing with friends, guildmates, or both
-  
+  3. Allowing the user to disable syncing with friends or guildmates, or maybe even with select people
+
 I expect that these things will help a lot with keeping the database size manageable.  For now, it should be fine, though (and long as you and your friends aren't the sort to spend your time camping lowbies in Redridge all day).  Check back in October 2019 for an update to address this problem.
 
-If it's causing you problems sooner than expected, you can turn syncing off with `/kaydee sync disable` and then getting rid of your current database by deleting `...\World of Warcraft\<VERSION>\WTF\Account\<ACCOUNT_NUMBER>\SavedVariables\Kaydee.lua`.
+If it's causing you problems sooner than expected, you can turn syncing off with `/kaydee autosync disable` and then getting rid of your current database by deleting `...\World of Warcraft\<VERSION>\WTF\Account\<ACCOUNT_NUMBER>\SavedVariables\Kaydee.lua`.
 
 ## Command Line API
 
 Kaydee supports the following slash commands:
 
+  * `/kaydee autosync disable`: Configure Kaydee to disable automatically sending syncs and receiving syncs
+  * `/kaydee autosync enable`: Configure Kaydee to re-enable automatically sending syncs and receiving syncs
   * `/kaydee help`: Print the available slash commands
   * `/kaydee history`: Show the "Your History" window
   * `/kaydee sync`: Force a sync to your friends and guildmates
-  * `/kaydee sync disable`: Configure Kaydee to disable automatically sending syncs and receiving syncs
-  * `/kaydee sync enable`: Configure Kaydee to re-enable automatically sending syncs and receiving syncs
 
 ## Localization
 

@@ -4,22 +4,22 @@ local forEach = Brazier.Array.forEach
 
 local helpLines =
   { "Kaydee"
+  , "- autosync disable"
+  , "- autosync enable"
   , "- help"
   , "- sync"
-  , "- sync disable"
-  , "- sync enable"
   }
 
 -- () => Unit
 function Kaydee:SlashKaydee(input)
 
-  local _, _, command, args = string.find(input, "%s*(%w+)%s?(.*)")
+  local _, _, command, args = string.find(input, "%s*(%w+%s?%w*)%s?(.*)")
 
   if command == "" or command == nil or command == "help" then
     forEach(print)(helpLines)
-  elseif command == "sync disable" then
+  elseif command == "autosync disable" then
     Kaydee.db.profile.syncIsEnabled = false
-  elseif command == "sync enable" then
+  elseif command == "autosync enable" then
     Kaydee.db.profile.syncIsEnabled = true
   elseif command == "sync" then
     Kaydee.syncWithBuddies()
