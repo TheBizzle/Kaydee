@@ -17,6 +17,8 @@ function Kaydee:SlashKaydee(input)
     end
   elseif command == "sync" then
     Kaydee.syncWithBuddies()
+  elseif command == "history" then
+    Kaydee.toggleHistory()
   else
     print(L10N["Unknown command"] .. ": " .. command)
   end

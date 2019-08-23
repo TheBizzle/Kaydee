@@ -16,6 +16,7 @@ modules/Init.lua
 modules/Util.lua
 modules/Sync.lua
 modules/Kaydee.lua
+modules/History.lua
 modules/CombatLogging.lua
 modules/Slash.lua
 

@@ -1,5 +1,6 @@
 local L10N =
   { ["Attack/Swing"]         = "Attack/Swing"
+  , ["Close"]                = "Close"
   , ["Rank"]                 = "Rank"
   , ["Unknown command"]      = "Unknown command"
   , ["Unknown outcome type"] = "Unknown outcome type"
