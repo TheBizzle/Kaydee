@@ -148,7 +148,13 @@
     </Frames>
 
     <Scripts>
-      <OnKeyDown>if key == "ESCAPE" then self:Hide() end</OnKeyDown>
+      <OnKeyDown>
+        if key == "ESCAPE" then
+          self:Hide()
+        else
+          self:SetPropagateKeyboardInput(true)
+        end
+      </OnKeyDown>
       <OnLoad>
         KaydeeHistoryTitleText:SetText("Kaydee: " .. KaydeeUF.L10N["Your History"])
       </OnLoad>
