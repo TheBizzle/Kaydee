@@ -7,6 +7,7 @@ local helpLines =
   , "- autosync disable"
   , "- autosync enable"
   , "- help"
+  , "- history"
   , "- sync"
   }
 
@@ -21,10 +22,10 @@ function Kaydee:SlashKaydee(input)
     Kaydee.db.profile.syncIsEnabled = false
   elseif command == "autosync enable" then
     Kaydee.db.profile.syncIsEnabled = true
-  elseif command == "sync" then
-    Kaydee.syncWithBuddies()
   elseif command == "history" then
     Kaydee.toggleHistory()
+  elseif command == "sync" then
+    Kaydee.syncWithBuddies()
   else
     print(L10N["Unknown command"] .. ": " .. command)
   end
