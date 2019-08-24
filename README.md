@@ -36,7 +36,7 @@ I have noticed that the addon causes substantial pauses when there are thousands
 
 I expect that these things will help a lot with keeping the database size manageable.  For now, it should be fine, though (and long as you and your friends aren't the sort to spend your time camping lowbies in Redridge all day).  Check back in October 2019 for an update to address this problem.
 
-If it's causing you problems sooner than expected, you can turn syncing off with `/kaydee autosync disable` and then getting rid of your current database by deleting `...\World of Warcraft\<VERSION>\WTF\Account\<ACCOUNT_NUMBER>\SavedVariables\Kaydee.lua`.
+If it's causing you problems sooner than expected, you can turn syncing off with `/kaydee autosync disable` and then get rid of your current database by deleting `...\World of Warcraft\<VERSION>\WTF\Account\<ACCOUNT_NUMBER>\SavedVariables\Kaydee.lua`.
 
 ## Command Line API
 
