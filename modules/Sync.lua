@@ -25,7 +25,6 @@ function Kaydee.handleDBUpdate(messagePrefix, message, distType, senderName)
   end
 
   local encountersDB = Kaydee.getEncounters()
-  local guidToName   = Kaydee.getGUIDToName()
 
   -- Some things are absolute, and some are not.
   -- The timestamp is not absolute.  They can differ
