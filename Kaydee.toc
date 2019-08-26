@@ -1,7 +1,7 @@
 ## Interface: 11302
 ## Title: Kaydee
 ## Author: TheBizzle
-## Version: 1.0.0
+## Version: 1.0.1
 ## Dependencies: LibBrazier, LibDBIcon-1.0, LibDeflate
 ## SavedVariables: KaydeeDB
 ## X-Donate: www.github.com/TheBizzle
