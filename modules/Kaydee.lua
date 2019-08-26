@@ -153,12 +153,14 @@ end
 -- (GameTooltip) => Unit
 local function handleTooltip(self)
   local unit = select(2, self:GetUnit())
-  local guid = UnitGUID(unit)
-  if UnitIsPlayer(unit) then
-    local encounters = myCaredEncountersWith(guid)
-    local bins       = encountersToBins(guid, encounters)
-    local filBins    = organize(bins)
-    pipeline(map(binToString), forEach(function(x) self:AddLine(x) end))(filBins)
+  if unit ~= nil then
+    local guid = UnitGUID(unit)
+    if UnitIsPlayer(unit) then
+      local encounters = myCaredEncountersWith(guid)
+      local bins       = encountersToBins(guid, encounters)
+      local filBins    = organize(bins)
+      pipeline(map(binToString), forEach(function(x) self:AddLine(x) end))(filBins)
+    end
   end
 end
 
