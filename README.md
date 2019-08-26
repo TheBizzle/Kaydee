@@ -2,7 +2,7 @@
 
 ## What Is It?
 
-Kaydee is a PvP tracker addon for World of Warcraft, and is compatible with World of Warcraft: Classic.  
+Kaydee is a PvP tracker addon for World of Warcraft, and is compatible with World of Warcraft: Classic.
 
 Kaydee watches for any PvP killing blows in your vicinity and records them.  While killing blows are not the most full or accurate way to sum up an entire PvP encounter, they get us 80% of the way there for 5% of the work.  The records tracked are not just Horde vs. Alliance, but all PvP, including Gurubashi Arena and duels.
 
