@@ -26,6 +26,8 @@ Clicking on the Kaydee minimap icon (the same icon as the Warrior ability Reveng
 
 This window is a log of all of the PvP killing blows you have ever dealt or received (while Kaydee has been enabled).  You can scroll through it and reminisce to your heart's content.
 
+Usually, it just says "No modifiers" under the entry.  Sometimes, it might contain some information about if the killing blow was blocked, absorbed, or partially resisted.
+
 ## Warning: Performance
 
 I have noticed that the addon causes substantial pauses when there are thousands of entries or more.  I intend to solve this in the future by
